@@ -1,10 +1,18 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from .models import Car
 from .serializers import CarSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .permissions import UpdateWithinHoursPermission
+
+
+class CarDetailView(RetrieveUpdateAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+    permission_classes = [UpdateWithinHoursPermission]
 
 
 # CBV da Car modeli uchun CRUD
