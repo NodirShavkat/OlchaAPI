@@ -15,7 +15,7 @@ class UpdatePermission(BasePermission):
         Return `True` if permission is granted, `False` otherwise.
         """
         return True
-    
+
 
 class UpdateWithinHoursPermission(BasePermission):
     allowed_hours = 4

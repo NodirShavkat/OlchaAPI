@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from .views import CarDetailApiView, read_create, create, update, delete
+from .views import CustomAuthToken, LogoutApiView, CarDetailApiView, read_create, create, update, delete
 
 urlpatterns = [
     path('car/', CarDetailApiView.as_view()),
@@ -9,4 +9,6 @@ urlpatterns = [
     path('car-fbv-create/', create),
     path('car-fbv-update/<int:car_id>/', update),
     path('car-fbv-delete/<int:car_id>/', delete),
+    path('login/', CustomAuthToken.as_view(), name='login'),
+    path('logout/', LogoutApiView.as_view(), name='logout'),
 ]
