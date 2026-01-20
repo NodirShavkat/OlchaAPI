@@ -22,14 +22,44 @@ class CarDetailView(RetrieveUpdateAPIView):
 class CarDetailApiView(APIView):
     # read
     def get(self, request, car_id=None):
+        queryset = Car.objects.all()
+
         if car_id:
-            car = Car.objects.get(id=car_id)
-            serializer = CarSerializer(car)
-        else:
-            cars = Car.objects.all()
-            serializer = CarSerializer(cars, many=True)
+            car = get_object_or_404(Car, id=car_id)
+            serializer = CarSerializer(car, many=False)
+            return Response(serializer.data)
+
+        q_id = request.GET.get('id')
+        color = request.GET.get('color')
+        price = request.GET.get('price')
+
+        if q_id:
+            queryset = queryset.filter(id=q_id)
+
+        if color:
+            queryset = queryset.filter(color=color)
+
+        if price:
+            queryset = queryset.filter(price=price)
         
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = CarSerializer(queryset, many=True)
+        return Response(serializer.data)
+    # old version
+    # def get(self, request, car_id=None):
+    #     if car_id:
+    #         car = Car.objects.get(id=car_id)
+    #         serializer = CarSerializer(car)
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    #     query_id = request.GET.get('id', None)
+    #     if query_id:
+    #         car = Car.objects.get(id=query_id)
+    #         serializer = CarSerializer(car)
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    #     cars = Car.objects.all()
+    #     serializer = CarSerializer(cars, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
     # create
     def post(self, request):
